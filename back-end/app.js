@@ -3,6 +3,7 @@ const express = require('express') // CommonJS import style!
 const morgan = require('morgan') // middleware for nice logging of incoming HTTP requests
 const cors = require('cors') // middleware for enabling CORS (Cross-Origin Resource Sharing) requests.
 const mongoose = require('mongoose')
+const port = process.env.PORT || 3000
 
 const app = express() // instantiate an Express object
 app.use(morgan('dev', { skip: (req, res) => process.env.NODE_ENV === 'test' })) // log all incoming requests, except when in unit test mode.  morgan has a few logging default styles - dev is a nice concise color-coded style
@@ -11,6 +12,8 @@ app.use(cors()) // allow cross-origin resource sharing
 // use express's builtin body-parser middleware to parse any data included in a request
 app.use(express.json()) // decode JSON-formatted incoming POST data
 app.use(express.urlencoded({ extended: true })) // decode url-encoded incoming POST data
+
+app.use('/images',express.static('public/images')) //import image
 
 // connect to database
 mongoose
@@ -21,6 +24,23 @@ mongoose
 // load the dataabase models we want to deal with
 const { Message } = require('./models/Message')
 const { User } = require('./models/User')
+
+app.get('/AboutUs', async(req, res)=>{
+  try{
+    res.json({
+      name: 'Hannah Liang',
+      description: ['Hi guys, my name is Hannah and I am from Shanghai, China. I’m passionate about dancing and turning my love for creativity into exciting ventures. Right now, I’m working on building my own MCN (Multi-Channel Network) company, where I’m combining my entrepreneurial spirit with my passion for the digital content world.'],
+      imageUrl: `http://localhost:${port}/images/hannah.jpg`,
+      status: 'all good'
+    });
+  }catch(err){
+    console.error(err)
+    res.status(400).json({
+      error:err,
+      status:'failed to retrieve the information',
+    })
+  }
+})
 
 // a route to handle fetching all messages
 app.get('/messages', async (req, res) => {
