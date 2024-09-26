@@ -8,7 +8,7 @@ const AboutPage = () => {
   
     useEffect(() => {
       axios
-        .get(`${process.env.REACT_APP_SERVER_HOSTNAME}/aboutUs`)
+        .get(`${process.env.REACT_APP_SERVER_HOSTNAME}/about_us`)
         .then((response) => {
           setAboutInfo(response.data);
         })

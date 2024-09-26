@@ -25,7 +25,7 @@ mongoose
 const { Message } = require('./models/Message')
 const { User } = require('./models/User')
 
-app.get('/AboutUs', async(req, res)=>{
+app.get('/about_us', async(req, res)=>{
   try{
     res.json({
       name: 'Hannah Liang',
